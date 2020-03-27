@@ -188,7 +188,7 @@
                 "orderable": false,
                 "className": "text-center",
                 'render': function (data, type, full, meta) {
-                    if (data === 1) {
+                    if (data == 1) {
                         return "<center>" +
                             '<a class="btn btn-default btn-xs"  title="Eliminar" href="javascript:Ventas.EliminarVenta(' + meta.row + ')"><i class="fa fa-trash" aria-hidden="true"></i></a>' +
                             "</center> ";
@@ -284,20 +284,18 @@
     }
 
     function $btnSaveVenta_click() {
+
+
+
         var cod_prod = $txtModalCodigo.val();
         var total = app.FormatNumber($txtModalPrecioVenta.val());
-        var cantidad = $txtModalCatVenta.val();
         var talla = $cboModalTalla.val();
 
         if (cod_prod !== "") {
-            if (total > 0 && cantidad > 0 && talla !== -1) {
+            if (total > 0 && talla !== -1) {
                  InsertUpdateVenta();
             } else if (talla === -1) {
                 app.Message.Info("ERROR", "Seleccione una talla.", null, null);
-            } else if (cantidad === "") {
-                app.Message.Info("ERROR", "Ingrese una cantidad.", null, null);
-            } else if (cantidad === 0) {
-                app.Message.Info("ERROR", "Ingrese una cantidad mayor a 0.", null, null);
             } else if (total === 0) {
                 app.Message.Info("ERROR", "Ingrese un precio de venta.", null, null);
             } 
@@ -431,6 +429,7 @@
     }
 
     function $cboModalTalla_change() {
+        $txtModalCatVenta.val(1);
         $txtModalPrecioVenta_keypress();
     }
 

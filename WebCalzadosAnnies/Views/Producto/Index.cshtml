@@ -117,14 +117,17 @@
                                 <table id="tblListadoProductos" class="table table-bordered table-striped table-hover table-condensed" style="width:100%;">
                                     <thead>
                                         <tr>
-                                            <th width="10%" ;>C&oacute;digo Producto</th>
-                                            <th width="5%" ;>Stock</th>
-                                            <th width="10%;">Codigo Almac&eacute;n</th>
-                                            <th width="15%;">Marca</th>
-                                            <th width="10%;">Precio</th>
-                                            <th width="10%;">Estado</th>
-                                            <th width="8%;">Fecha</th>
-                                            <th width="15%;"></th>
+                                            <th width="3%;">C&oacute;digo Producto</th>
+                                            <th width="3%;">Stock</th>
+                                            <th width="3%;">Codigo Almac&eacute;n</th>
+                                            <th width="10%;">Marca</th>
+                                            <th width="10%;">Talla</th>
+                                            <th width="10%;">Talla Vendida</th>
+                                            <th width="3%;">Precio</th>
+                                            <th width="3%;">Precio Mayor</th>
+                                            <th width="5%;">Fecha</th>
+                                            <th width="3%;">Estado</th>
+                                            <th width="5%;"></th>
                                         </tr>
                                     </thead>
                                 </table>
@@ -149,21 +152,21 @@
             <div class="modal-body">
                 <form id="formModal" class="small" onkeypress="return event.keyCode != 13;">
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label for="txtModalCodigo">C&oacute;digo Producto</label>
                                 <input class="form-control input-sm" type="text" id="txtModalCodigo" maxlength="20" />
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-6">
                             <div class="form-group">
                                 <label for="txtModalMarca">Marca</label>
                                 <input class="form-control input-sm" type="text" id="txtModalMarca" maxlength="250" placeholder="" />
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="form-group">
-                                <label for="txtModalPrecio">Precio</label>
+                                <label for="txtModalPrecio">Precio Menor</label>
                                 <input class="form-control input-sm" type="text" id="txtModalPrecio" maxlength="50" value="0.00" />
                             </div>
                         </div>
@@ -172,24 +175,27 @@
 
                     <div class="row">
 
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label for="txtModalCodigoAlmacen">C&oacute;digo Almac&eacute;n</label>
                                 <input class="form-control input-sm" type="text" id="txtModalCodigoAlmacen" maxlength="50" />
                             </div>
                         </div>
 
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label for="cboModalTipoProducto">Tipo de Producto</label>
                                 <select class="form-control" id="cboModalTipoProducto">
                                     <option value="0">Seleccionar</option>
                                     <option value="1">Verano</option>
                                     <option value="2">Invierno</option>
+                                    <option value="3">Primavera</option>
+                                    <option value="4">Otoño</option>
+                                    
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="form-group">
                                 <label for="cboModalEstado">Estado</label>
                                 <select class="form-control" id="cboModalEstado">
@@ -197,6 +203,12 @@
                                     <option value="1">Activo</option>
                                     <option value="2">Inactivo</option>
                                 </select>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-group">
+                                <label for="txtModalPrecio">Precio Mayor</label>
+                                <input class="form-control input-sm" type="text" id="txtModalPrecioMayor" maxlength="50" value="0.00" />
                             </div>
                         </div>
                     </div>

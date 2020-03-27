@@ -41,7 +41,7 @@
         };
         var DataTableLengthChange = false;
         var DataTablePageLength = 20;
-        var TablasPageLength = 100;
+        var TablasPageLength = 50;
         // Configuracion general select2
         var Select2AllowClear = true;
         var Select2Style = {
@@ -445,7 +445,9 @@
 
     }
 
-    function FillDataTable(selector, data, columns, columnsDefs, tableName, filtros, rowCallback, drawCallback, indexRow, selectColumn, buttons, paginacion) {
+    function FillDataTable(selector, data, columns, columnsDefs, tableName, filtros, rowCallback, drawCallback, indexRow, buttons, paginacion) {
+
+        var pageLength = !isNullUndefined(filtros) && !isNullUndefined(filtros.pageLength) ? filtros.pageLength : app.Defaults.DataTablePageLength;
         var table;
         if ($.fn.dataTable.isDataTable(tableName)) {
             table = selector.dataTable().api();
@@ -462,7 +464,7 @@
                     language: app.Defaults.DataTableLanguage,
                     rowCallback: rowCallback,
                     drawCallback: drawCallback,
-                    pageLength: app.Defaults.DataTablePageLength,
+                    pageLength: pageLength,
                     dom: 'Bfrtip',
                     buttons: buttons == undefined || buttons == null ? [] : buttons,
                     info: false

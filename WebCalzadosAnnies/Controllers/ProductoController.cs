@@ -151,7 +151,7 @@ namespace WebCalzadosAnnies.Controllers
 
 
             string[] Cabezeras = {
-                    "Código Producto", "Stock", "Codigo Almacén", "Marca", "Talla" , "Talla Vendida", "Precio" , "Estado","Fecha"
+                    "Código Producto", "Stock", "Codigo Almacén", "Marca", "Talla" , "Talla Vendida", "Precio", "Precio Mayor" , "Estado","Fecha"
                 };
 
             // Se crea la primera fila para las cabceras.
@@ -191,6 +191,7 @@ namespace WebCalzadosAnnies.Controllers
                 AddValue(row, cellnum++, item.Talla_Prod, styleBody); sheet.AutoSizeColumn(cellnum);
                 AddValue(row, cellnum++, item.Talla_Vendida_Prod, styleBody); sheet.AutoSizeColumn(cellnum);
                 AddValue(row, cellnum++, item.Precio_Prod.ToString(), styleBody); sheet.AutoSizeColumn(cellnum);
+                AddValue(row, cellnum++, item.Precio_Prod_Mayor.ToString(), styleBody); sheet.AutoSizeColumn(cellnum);
                 AddValue(row, cellnum++, item.Estado_Prod == 1 ? "Activo" : "Inactivo".ToString(), styleBody); sheet.AutoSizeColumn(cellnum);
                 AddValue(row, cellnum++, item.FechaDesde.ToString().Substring(6, 2) + "/" + item.FechaDesde.ToString().Substring(4, 2) + "/" + item.FechaDesde.ToString().Substring(0, 4), styleBody); sheet.AutoSizeColumn(cellnum);
 

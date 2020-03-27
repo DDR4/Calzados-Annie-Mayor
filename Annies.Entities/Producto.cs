@@ -16,6 +16,7 @@ namespace Annies.Entities
         public string Talla_Prod { get; set; }
         public string Talla_Vendida_Prod { get; set; }
         public double Precio_Prod { get; set; }
+        public double Precio_Prod_Mayor { get; set; }
         public int Stock_Prod { get; set; }
         public int Tipo_Prod { get; set; }
         public string Codigo_Al { get; set; }

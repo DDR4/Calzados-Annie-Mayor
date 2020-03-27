@@ -34,6 +34,9 @@ namespace Annies.DataAccess
                          Cod_Prod = n.Single(d => d.Key.Equals("Cod_Prod")).Value.Parse<int>(),
                          Marca_Prod = n.Single(d => d.Key.Equals("Marca_Prod")).Value.Parse<string>(),
                          Precio_Prod = n.Single(d => d.Key.Equals("Precio_Prod")).Value.Parse<double>(),
+                         Precio_Prod_Mayor = n.Single(d => d.Key.Equals("Precio_Prod_Mayor")).Value.Parse<double>(),
+                         Talla_Prod = n.Single(d => d.Key.Equals("Talla_Prod")).Value.Parse<string>(),
+                         Talla_Vendida_Prod = n.Single(d => d.Key.Equals("Talla_Vendida_Prod")).Value.Parse<string>(),
                          Stock_Prod = n.Single(d => d.Key.Equals("Stock_Prod")).Value.Parse<int>(),
                          Tipo_Prod = n.Single(d => d.Key.Equals("Tipo_Prod")).Value.Parse<int>(),
                          Codigo_Al = n.Single(d => d.Key.Equals("Cod_Almacen")).Value.Parse<string>(),
@@ -66,6 +69,7 @@ namespace Annies.DataAccess
                 parm.Add("@Cod_Almacen", obj.Codigo_Al);
                 parm.Add("@Marca_Prod", obj.Marca_Prod);
                 parm.Add("@Precio_Prod", obj.Precio_Prod);
+                parm.Add("@Precio_Prod_Mayor", obj.Precio_Prod_Mayor);
                 parm.Add("@Tipo_Prod", obj.Tipo_Prod);
                 parm.Add("@Usuario", obj.Auditoria.UsuarioCreacion);
                 parm.Add("@Estado", obj.Estado_Prod);
@@ -123,6 +127,7 @@ namespace Annies.DataAccess
                          Talla_Prod = n.Single(d => d.Key.Equals("Talla_Prod")).Value.Parse<string>(),
                          Talla_Vendida_Prod = n.Single(d => d.Key.Equals("Talla_Vendida_Prod")).Value.Parse<string>(),
                          Precio_Prod = n.Single(d => d.Key.Equals("Precio_Prod")).Value.Parse<double>(),
+                         Precio_Prod_Mayor = n.Single(d => d.Key.Equals("Precio_Prod_Mayor")).Value.Parse<double>(),
                          Estado_Prod = n.Single(d => d.Key.Equals("Estado_Prod")).Value.Parse<int>(),
                          FechaDesde = n.Single(d => d.Key.Equals("Fecha")).Value.Parse<int>()
                      });

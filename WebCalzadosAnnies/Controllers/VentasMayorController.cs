@@ -1,4 +1,4 @@
-﻿    using Annies.Common;
+﻿using Annies.Common;
 using Annies.Entities;
 using NPOI.HSSF.Util;
 using NPOI.SS.UserModel;
@@ -10,10 +10,11 @@ using System.IO;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
+using System.Xml.Linq;
 
 namespace WebCalzadosAnnies.Controllers
 {
-    public class VentasController : Controller
+    public class VentasMayorController : Controller
     {
         // GET: Ventas
         public ActionResult Index()
@@ -21,8 +22,7 @@ namespace WebCalzadosAnnies.Controllers
             return View();
         }
 
-
-        public JsonResult GetVentas(Annies.Entities.Ventas obj)
+        public JsonResult GetVentasMayor(Annies.Entities.VentasMayor obj)
         {
             try
             {
@@ -43,9 +43,9 @@ namespace WebCalzadosAnnies.Controllers
                     Fin = fin
                 };
 
-                var bussingLogic = new Annies.BusinessLogic.Ventas();
-                var response = bussingLogic.GetVentas(obj);
-                
+                var bussingLogic = new Annies.BusinessLogic.VentasMayor();
+                var response = bussingLogic.GetVentasMayor(obj);
+
                 var Datos = response.Data;
                 int totalRecords = Datos.Any() ? Datos.FirstOrDefault().Operacion.TotalRows : 0;
                 int recFilter = totalRecords;
@@ -57,98 +57,70 @@ namespace WebCalzadosAnnies.Controllers
                     recordsFiltered = recFilter,
                     data = Datos
                 });
-                
+
                 return Json(result);
             }
             catch (Exception ex)
             {
                 return Json(Annies.Common.ConfigurationUtilities.ErrorCatchDataTable(ex));
             }
-        
+
         }
 
-        public JsonResult InsertUpdateVentas(Annies.Entities.Ventas obj)
+        public JsonResult InsertUpdateVentasMayor(Annies.Entities.VentasMayor obj)
         {
-            var bussingLogic = new Annies.BusinessLogic.Ventas();
+            var bussingLogic = new Annies.BusinessLogic.VentasMayor();
             obj.Auditoria = new Auditoria
             {
                 UsuarioCreacion = User.Identity.Name
             };
+
+            var tallasxml = obj.Tallas_Venta.Select(i => new XElement("TallaVenta",
+                       new XElement("Talla", i.Talla),
+                       new XElement("Cod_prod", i.Cod_Prod),
+                       new XElement("Cantidad", i.Cantidad),
+                       new XElement("Precio", i.Precio_Prod_Mayor)));
+            obj.Talla_Ventas = new XDocument(new XDeclaration("1.0", "utf-8", "yes"), new XElement("TallasVenta", tallasxml));
+
             var response = bussingLogic.InsertUpdateVentas(obj);
 
             return Json(response);
         }
-        public JsonResult DeleteVentas(Annies.Entities.Ventas obj)
+
+        public JsonResult TallasVentaMayor(string Cod_Venta)
         {
-            var bussingLogic = new Annies.BusinessLogic.Ventas();
-            obj.Auditoria = new Auditoria
-            {
-                UsuarioModificacion = User.Identity.Name
-            };
-            var response = bussingLogic.DeleteVentas(obj);
+            var bussingLogic = new Annies.BusinessLogic.VentasMayor();
+            var response = bussingLogic.TallasVentaMayor(Cod_Venta);
+
             return Json(response);
 
         }
 
-        public JsonResult GetProducto(Annies.Entities.Producto obj)
+        public JsonResult DeleteVentasMayor(Annies.Entities.VentasMayor obj)
         {
-            try
+            var bussingLogic = new Annies.BusinessLogic.VentasMayor();
+            obj.Auditoria = new Auditoria
             {
-                var bussingLogic = new Annies.BusinessLogic.Producto();
-                obj.Stock_Prod = 1;
-                obj.Estado_Prod = 1;
-                var ctx = HttpContext.GetOwinContext();
-                var tipoUsuario = ctx.Authentication.User.Claims.FirstOrDefault().Value;
-
-                string draw = Request.Form.GetValues("draw")[0];
-                int inicio = Convert.ToInt32(Request.Form.GetValues("start").FirstOrDefault());
-                int fin = Convert.ToInt32(Request.Form.GetValues("length").FirstOrDefault());
-                
-                obj.Auditoria = new Auditoria
-                {
-                    TipoUsuario = tipoUsuario
-                };
-                obj.Operacion = new Operacion
-                {
-                    Inicio = (inicio / fin),
-                    Fin = fin
-                };
-
-                var response = bussingLogic.GetProducto(obj);
-                var Datos = response.Data;
-                int totalRecords = Datos.Any() ?  Datos.FirstOrDefault().Operacion.TotalRows : 0;
-                int recFilter = totalRecords;
-
-                var result = (new
-                {
-                    draw = Convert.ToInt32(draw),
-                    recordsTotal = totalRecords,
-                    recordsFiltered = recFilter,
-                    data = Datos
-                });
-                
-                return Json(result);
-            }
-            catch (Exception ex)
-            {
-                return Json(Annies.Common.ConfigurationUtilities.ErrorCatchDataTable(ex));
-            }
+                UsuarioModificacion = User.Identity.Name
+            };
+            var response = bussingLogic.DeleteVentasMayor(obj);
+            return Json(response);
 
         }
 
-        public JsonResult GetAllVentas(Annies.Entities.Ventas obj)
+        public JsonResult GetAllVentasMayor(Annies.Entities.VentasMayor obj)
         {
             try
             {
-                Session["ReporteVenta"] = null;
-                var bussingLogic = new Annies.BusinessLogic.Ventas();
-                var response = bussingLogic.GetAllVentas(obj);
-                Session["ReporteVenta"] = response.Data.ToList();
+                Session["ReporteVentaMayor"] = null;
+                var bussingLogic = new Annies.BusinessLogic.VentasMayor();
+                var response = bussingLogic.GetAllVentasMayor(obj);
+                Session["ReporteVentaMayor"] = response.Data.ToList();
                 return Json(response);
             }
             catch (Exception ex)
             {
-                var result = new Annies.Common.Response<List<Annies.Entities.Ventas>>(ex);
+                var result = new Annies.Common.Response<List<Annies.Entities.VentasMayor>>(ex);
                 return Json(result);
             }
 
@@ -156,16 +128,16 @@ namespace WebCalzadosAnnies.Controllers
 
         public void GenerarExcel()
         {
-            var NombreExcel = "Venta - Sistemas de Ventas ";
+            var NombreExcel = "VentaMayor - Sistemas de Ventas ";
 
             // Recuperamos la data  de las consulta DB
-            var data = (List<Annies.Entities.Ventas>)Session["ReporteVenta"];
+            var data = (List<Annies.Entities.VentasMayor>)Session["ReporteVentaMayor"];
 
             // Creación del libro excel xlsx.
             var wb = new XSSFWorkbook();
 
             // Creación del la hoja y se especifica un nombre
-            var fileName = WorkbookUtil.CreateSafeSheetName("Ventas");
+            var fileName = WorkbookUtil.CreateSafeSheetName("VentasMayor");
             ISheet sheet = wb.CreateSheet(fileName);
 
             // Contadores para filas y columnas.
@@ -190,8 +162,8 @@ namespace WebCalzadosAnnies.Controllers
 
 
             string[] Cabezeras = {
-                    "Código Venta", "Código Producto","Marca" ,"Cantidad Venta", "Fecha","Precio Venta", "Precio Final" , "Talla Venta"
-                };
+                    "Código Venta","Marca","Precio Producto","Precio Venta","Descuento","Precio Total","Fecha"
+             };
 
             // Se crea la primera fila para las cabceras.
             IRow row = sheet.CreateRow(rownum++);
@@ -224,13 +196,13 @@ namespace WebCalzadosAnnies.Controllers
 
                 sheet.AutoSizeColumn(cellnum);
                 AddValue(row, cellnum++, item.Cod_Venta.ToString(), styleBody); sheet.AutoSizeColumn(cellnum);
-                AddValue(row, cellnum++, item.Producto.Cod_Prod.ToString(), styleBody); sheet.AutoSizeColumn(cellnum);
                 AddValue(row, cellnum++, item.Producto.Marca_Prod.ToString(), styleBody); sheet.AutoSizeColumn(cellnum);
-                AddValue(row, cellnum++, item.Cant_Venta.ToString(), styleBody); sheet.AutoSizeColumn(cellnum);
-                AddValue(row, cellnum++, item.Fecha.ToString().Substring(6,2) +"/"+ item.Fecha.ToString().Substring(4,2) + "/" + item.Fecha.ToString().Substring(0,4), styleBody); sheet.AutoSizeColumn(cellnum);
+                AddValue(row, cellnum++, item.Precio_Prod.ToString(), styleBody); sheet.AutoSizeColumn(cellnum);
                 AddValue(row, cellnum++, item.Precio_Venta.ToString(), styleBody); sheet.AutoSizeColumn(cellnum);
+                AddValue(row, cellnum++, item.Descuento_Venta.ToString(), styleBody); sheet.AutoSizeColumn(cellnum);
                 AddValue(row, cellnum++, item.Precio_Final.ToString(), styleBody); sheet.AutoSizeColumn(cellnum);
-                AddValue(row, cellnum++, item.Talla_Venta.ToString(), styleBody); sheet.AutoSizeColumn(cellnum);
+                AddValue(row, cellnum++, item.Fecha.ToString().Substring(6, 2) + "/" + item.Fecha.ToString().Substring(4, 2) + "/" + item.Fecha.ToString().Substring(0, 4), styleBody); sheet.AutoSizeColumn(cellnum);
+
             }
 
             var nameFile = NombreExcel + DateTime.Now.ToString("dd_MM_yyyy HH:mm:ss") + ".xlsx";
@@ -250,15 +222,6 @@ namespace WebCalzadosAnnies.Controllers
             cell.CellStyle = styleBody;
 
         }
-
-        public JsonResult TallasProducto(string Cod_Prod)
-        {
-            var bussingLogic = new Annies.BusinessLogic.Producto();
-            var response = bussingLogic.TallasProducto(Cod_Prod);
-            var result = new Response<IEnumerable<Annies.Entities.Tallas>>(response.Data.Where(x => x.Cantidad > 0));
-            return Json(result);
-
-        }      
 
     }
 }

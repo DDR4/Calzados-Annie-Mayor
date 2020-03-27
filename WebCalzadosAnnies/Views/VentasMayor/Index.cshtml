@@ -1,12 +1,12 @@
 ﻿@using Microsoft.AspNet.Identity
 
 @{
-    ViewBag.Title = "Ventas por Menor";
+    ViewBag.Title = "Ventas por Mayor";
 }
 
 
 <section class="content-header">
-    <h1> Ventas por Menor</h1>
+    <h1> Ventas por Mayor</h1>
     @*<ol class="breadcrumb"> Control </ol>*@
 </section>
 
@@ -35,10 +35,10 @@
                                 <label for="cboTipoBusqueda">Tipo b&uacute;squeda</label>
                                 <select class="form-control" style="width:100%;" id="cboTipoBusqueda">
                                     <option value="5">Todos</option>
-                                    <option value="1">C&oacute;digo Producto</option>
+                                    @*<option value="1">C&oacute;digo Producto</option>*@
                                     <option value="2">Fecha </option>
-                                    <option value="3">Marca </option>
-                                    <option value="4">Talla</option>
+                                    @*<option value="3">Marca </option>
+                                    <option value="4">Talla</option>*@
                                 </select>
                             </div>
                             <div id="tipoCodigo" style="display:none;">
@@ -114,18 +114,17 @@
                     </div>
                     <br />
                     <div class="table-responsive">
-                        <table id="tblListadoVentas" class="table table-bordered table-hover dataTable" style="width:100%;">
+                        <table id="tblListadoVentasMayor" class="table table-bordered table-hover dataTable" style="width:100%;">
                             <thead>
                                 <tr>
                                     <th width="10%">Codigo Venta</th>
-                                    <th width="10%">Codigo Producto</th>
-                                    <th width="20%">Marca</th>
-                                    <th width="8%">Cantidad</th>
-                                    <th width="8%">Fecha</th>
-                                    <th width="8%">Precio Venta</th>
-                                    <th width="8%">Precio Final</th>
-                                    <th width="8%">Talla</th>
-                                    <th width="8%"></th>
+                                    <th width="30%">Marca </th>
+                                    <th width="10%">Precio Producto</th>
+                                    <th width="10%">Precio Venta</th>
+                                    <th width="10%">Descuento</th>
+                                    <th width="10%">Precio Total</th>
+                                    <th width="10%">Fecha</th>
+                                    <th width="10%"></th>
                                 </tr>
                             </thead>
                         </table>
@@ -148,58 +147,108 @@
             <div class="modal-body">
                 <form id="formModal" class="small">
                     <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group">
-                                <label for="txtModalCatVenta">Cantidad </label>
-                                <input class="form-control input-sm" type="text" id="txtModalCatVenta" maxlength="20" readonly="readonly" />
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label for="txtModalFecha">Fecha</label>
                                 <input class="form-control input-sm" type="text" id="txtModalFecha" disabled="disabled" readonly="readonly" />
                             </div>
                         </div>
 
-                    </div>
-
-                    <div class="row">
-                        <div class="col-md-6">
+                        <div class="col-md-4">
                             <div class="form-group">
                                 <label for="txtModalCodigo">C&oacute;digo</label>
                                 <input class="form-control input-sm" type="text" id="txtModalCodigo" maxlength="20" readonly />
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="row">
-                                <div class="col-md-7">
-                                    <div class="form-group">
-                                        <label for="txtModalTalla">Talla</label>
-                                        <select class="form-control select2" id="cboModalTalla" data-placeholder="Selecionar talla" style="width: 100%;"></select>
-                                    </div>
+
+                        <div class="col-md-2">
+                            <div class="form-group">
+                                <label for="btnProducto"><font color="white">_</font></label>
+                                <button type="button" class="btn btn-primary btn-sm" id="btnProducto">
+                                    <span class="fa fa-plus-square"></span>&nbsp;&nbsp;Producto
+                                </button>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="table-responsive">
+                                <table id="tblListadoProductosSeleccionados" class="table table-bordered table-striped table-hover table-condensed" style="width:100%;">
+                                    <thead>
+                                        <tr>
+                                            <th width="10%;">C&oacute;digo</th>
+                                            <th width="35%;">Marca</th>
+                                            <th width="10%;">Precio</th>
+                                            <th width="5%;"></th>
+                                        </tr>
+                                    </thead>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <br />
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="txtModalTalla">Nro Talla</label>
+                                    <select class="form-control select2" id="cboModalTalla"></select>
                                 </div>
-                                <div class="col-md-2">
-                                    <div class="form-group ">
-                                        <label for="btnProducto"><font color="white">_</font></label>
-                                        <button type="button" class="btn btn-primary btn-sm" id="btnProducto">
-                                            <span class="fa fa-plus-square"></span>&nbsp;&nbsp;Producto
-                                        </button>
-                                    </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="txtModalCantidadMaxima">Stock Talla</label>
+                                    <input class="form-control input-sm" type="text" id="txtModalCantidadMaxima" maxlength="3" readonly />
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="form-group">
+                                    <label for="txtModalCantidad">Cantidad</label>
+                                    <input class="form-control input-sm" type="text" id="txtModalCantidad" maxlength="3" />
+                                </div>
+                            </div>
+
+                            <div class="col-md-2">
+                                <div class="form-group">
+                                    <label for="btnBuscar"><font color="white">_</font></label>
+                                    <button class="btn btn-success btn-sm" id="btnAgregarTalla">
+                                        <span class="fa fa-plus-square"></span>
+                                        &nbsp;&nbsp; Agregar Talla
+                                    </button>
                                 </div>
                             </div>
                         </div>
                     </div>
 
                     <div class="form-group">
-                        <label for="txtModalMarca">Marca</label>
-                        <input class="form-control input-sm" type="text" id="txtModalMarca" maxlength="250" readonly />
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="table-responsive">
+                                    <table id="tblListadoTallas" class="table table-bordered table-striped table-hover table-condensed" style="width:100%;">
+                                        <thead>
+                                            <tr>
+                                                <th width="8%">Código</th>
+                                                <th width="8%">Nro Talla</th>
+                                                <th width="8%">Cantidades</th>
+                                                <th width="8%">Precio</th>
+                                                <th width="8%"></th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="row">
                         <div class="col-md-3">
                             <div class="form-group">
-                                <label for="txtModalPrecioProducto">Precio Producto </label>
+                                <label for="txtModalPrecioProducto">Precio Productos </label>
                                 <input class="form-control input-sm" type="text" id="txtModalPrecioProducto" maxlength="50" readonly />
                             </div>
                         </div>
@@ -226,10 +275,7 @@
                             </div>
                         </div>
 
-
                     </div>
-
-
 
                 </form>
             </div>
@@ -307,6 +353,44 @@
     </div>
 </div>
 
+<div class="modal fade" id="modalTallas" tabindex="-1" role="dialog" aria-labelledby="titleModal" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" aria-label="Close" data-dismiss="modal"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Detalle de Venta</h4>
+            </div>
+            <div class="modal-body">
+                <form id="formModal" class="small">
+
+                    <div class="form-group">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <div class="table-responsive">
+                                    <table id="tblTallasVentaMayor" class="table table-bordered table-striped table-hover table-condensed" style="width:100%;">
+                                        <thead>
+                                            <tr>
+                                                <th width="5%">Tallas</th>
+                                                <th width="5%">Codigo Producto</th>
+                                                <th width="15%">Marca Producto</th>
+                                                <th width="5%">Cantidad</th>
+                                                <th width="5%">Precio Producto</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-default btn-sm" type="button" data-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 
 
 
@@ -314,5 +398,5 @@
 
 
 @section scripts{
-    <script src="~/Content/js/Ventas/ventas.js"></script>
+    <script src="~/Content/js/VentasMayor/ventasmayor.js"></script>
 }
