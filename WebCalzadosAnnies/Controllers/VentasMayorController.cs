@@ -22,6 +22,7 @@ namespace WebCalzadosAnnies.Controllers
             return View();
         }
 
+        // cla cla estuvo aqui
         public JsonResult GetVentasMayor(Annies.Entities.VentasMayor obj)
         {
             try
