@@ -322,8 +322,8 @@
                 'render': function (data, type, full, meta) {
                     if (data == 1) {
                         return "Activo";
-                    } else return "Inactivo";
-
+                    } else if (data == 3) return "Oferta";
+                    else return "Inactivo";
                 }
             },           
             {
@@ -333,10 +333,16 @@
                 "className": "text-center",
                 'render': function (data, type, full, meta) {
                     if (data == 1) {
+                        var htmlOferta = '';
+                        if (full.Estado_Prod == 3) {
+                            htmlOferta =  '<a class="btn btn-default btn-xs" style= "margin-right:0.5em" title="Quitar la Oferta" href="javascript:Producto.CrearOferta(' + meta.row + ',' + "'Q'" + ');"><i class="fa fa-tags" aria-hidden="true"></i></a>';
+                        } else htmlOferta = '<a class="btn btn-default btn-xs" style= "margin-right:0.5em" title="Poner en Oferta" href="javascript:Producto.CrearOferta(' + meta.row + ',' + "'P'" +');"><i class="fa fa-tag" aria-hidden="true"></i></a>';
+
                         return "<center>" +
-                            '<a class="btn btn-default btn-xs" style= "margin-right:0.8em" title="Editar" href="javascript:Producto.EditarProducto(' + meta.row + ');"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>' +
+                            htmlOferta +
+                            '<a class="btn btn-default btn-xs" style= "margin-right:0.5em" title="Editar" href="javascript:Producto.EditarProducto(' + meta.row + ');"><i class="fa fa-pencil-square-o" aria-hidden="true"></i></a>' +
                             //'<a class="btn btn-default btn-xs" style= "margin-right:0.8em" title="Ver Tallas" href="javascript:Producto.DetalleTalla(' + meta.row + ')"><i class="fa fa-eye" aria-hidden="true"></i></a>' +
-                            '<a class="btn btn-default btn-xs" style= "margin-right:0.8em" title="Eliminar" href="javascript:Producto.EliminarProducto(' + meta.row + ')"><i class="fa fa-trash" aria-hidden="true"></i></a>' +
+                            '<a class="btn btn-default btn-xs" style= "margin-right:0.5em" title="Eliminar" href="javascript:Producto.EliminarProducto(' + meta.row + ')"><i class="fa fa-trash" aria-hidden="true"></i></a>' +
                             "</center> ";
                     } else {
                         return "";
@@ -569,11 +575,35 @@
         }
     }
 
+    function CrearOferta(row, flag) { 
+        var msg = "";
+        if (flag == "Q") {
+            msg = "quitar";
+        } else msg = "poner";
+
+        var fnAceptarCallback = function () {
+            var data = app.GetValueRowCellOfDataTable($tblListadoProductos, row); 
+            var url = "Producto/CrearOferta";
+            var method = "POST";
+            var obj = {
+                "Cod_Prod": data.Cod_Prod,
+                "flag": flag
+            };
+            var fnDoneCallback = function (data) {
+                GetProducto();
+            };
+            app.CallAjax(method, url, obj, fnDoneCallback, null, null, null);
+        };
+        app.Message.Confirm("Productos", "¿Esta seguro de " + msg +" la oferta?","Aceptar", "Cancelar", fnAceptarCallback,null);
+     
+    }
+
     return {
         EliminarProducto: EliminarProducto,
         EditarProducto: EditarProducto,
         EliminarNroTalla: EliminarNroTalla,
-        DetalleTalla: DetalleTalla
+        DetalleTalla: DetalleTalla,
+        CrearOferta: CrearOferta
     }
 
 

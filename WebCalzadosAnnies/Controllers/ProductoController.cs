@@ -232,5 +232,15 @@ namespace WebCalzadosAnnies.Controllers
             return Json(response);
 
         }
+
+
+        public JsonResult CrearOferta (int cod_Prod, string flag)
+        {
+            string usuario = User.Identity.Name;
+            var bussingLogic = new Annies.BusinessLogic.Producto();
+            var response = bussingLogic.CrearOferta(cod_Prod, flag, usuario);
+
+            return Json(response);
+        }
     }
 }

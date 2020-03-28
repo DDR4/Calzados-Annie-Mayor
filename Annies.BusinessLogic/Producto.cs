@@ -95,5 +95,19 @@ namespace Annies.BusinessLogic
                 throw new Exception(ex.Message);
             }
         }
+
+        public Response<int> CrearOferta(int cod_prod, string flag,string usuario)
+        {
+            try
+            {
+                var result = repository.CrearOferta(cod_prod, flag, usuario);
+                return new Response<int>(result);
+            }
+            catch (Exception ex)
+            {
+                return new Response<int>(ex);
+            }
+        }
+ 
     }
 }

@@ -182,7 +182,26 @@ namespace Annies.DataAccess
                 return result;
             }
         }
+         
+        public int CrearOferta(int cod_prod, string flag,string usuario)
+        {
 
+            using (var connection = Factory.ConnectionFactory())
+            {
+                connection.Open();
+                var parm = new DynamicParameters();
+                parm.Add("@Cod_Prod", cod_prod);
+                parm.Add("@flag", flag);
+                parm.Add("@Usuario", usuario); 
+                
+               var result = connection.Execute(
+                    sql: "SP_OFERTA_PRODUCTO",
+                    param: parm,
+                    commandType: CommandType.StoredProcedure);
+
+                return result;
+            }
+        }
 
 
     }
