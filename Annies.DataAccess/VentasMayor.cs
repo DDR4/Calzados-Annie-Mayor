@@ -1,4 +1,5 @@
 ﻿using Annies.Common;
+using Annies.Entities;
 using Dapper;
 using System;
 using System.Collections.Generic;
@@ -150,6 +151,51 @@ namespace Annies.DataAccess
                               Precio_Final = n.Single(d => d.Key.Equals("PrecioTotal")).Value.Parse<int>(),
                               Fecha = n.Single(d => d.Key.Equals("Fecha")).Value.Parse<int>()
                           });
+
+                return result;
+            }
+        }
+
+        public IEnumerable<Entities.Producto> GetProducto(Entities.Producto obj)
+        {
+            using (var connection = Factory.ConnectionFactory())
+            {
+                connection.Open();
+                var parm = new DynamicParameters();
+                parm.Add("@Cod_Prod", obj.Cod_Prod);
+                parm.Add("@Marca_Prod", obj.Marca_Prod);
+                parm.Add("@Stock_Prod", obj.Stock_Prod);
+                parm.Add("@Estado", obj.Estado_Prod);
+                parm.Add("@NumPagina", obj.Operacion.Inicio);
+                parm.Add("@TamPagina", obj.Operacion.Fin);
+                var result = connection.Query(
+                     sql: "SP_BUSCAR_PRODUCTO_VENTAS",
+                     param: parm,
+                     commandType: CommandType.StoredProcedure)
+                     .Select(m => m as IDictionary<string, object>)
+                     .Select(n => new Entities.Producto
+                     {
+                         Cod_Prod = n.Single(d => d.Key.Equals("Cod_Prod")).Value.Parse<int>(),
+                         Marca_Prod = n.Single(d => d.Key.Equals("Marca_Prod")).Value.Parse<string>(),
+                         Precio_Prod = n.Single(d => d.Key.Equals("Precio_Prod")).Value.Parse<double>(),
+                         Precio_Prod_Mayor = n.Single(d => d.Key.Equals("Precio_Prod_Mayor")).Value.Parse<double>(),
+                         Talla_Prod = n.Single(d => d.Key.Equals("Talla_Prod")).Value.Parse<string>(),
+                         Talla_Vendida_Prod = n.Single(d => d.Key.Equals("Talla_Vendida_Prod")).Value.Parse<string>(),
+                         Stock_Prod = n.Single(d => d.Key.Equals("Stock_Prod")).Value.Parse<int>(),
+                         Tipo_Prod = n.Single(d => d.Key.Equals("Tipo_Prod")).Value.Parse<int>(),
+                         Codigo_Al = n.Single(d => d.Key.Equals("Cod_Almacen")).Value.Parse<string>(),
+                         IdProducto = n.Single(d => d.Key.Equals("IdProducto")).Value.Parse<int>(),
+                         Estado_Prod = n.Single(d => d.Key.Equals("Estado_Prod")).Value.Parse<int>(),
+                         Auditoria = new Auditoria
+                         {
+                             TipoUsuario = obj.Auditoria.TipoUsuario,
+                         },
+                         Operacion = new Operacion
+                         {
+                             TotalRows = n.Single(d => d.Key.Equals("TotalRows")).Value.Parse<int>(),
+                         },
+                         FechaDesde = n.Single(d => d.Key.Equals("Fecha")).Value.Parse<int>(),
+                     });
 
                 return result;
             }

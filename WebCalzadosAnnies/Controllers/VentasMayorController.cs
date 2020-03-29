@@ -109,6 +109,52 @@ namespace WebCalzadosAnnies.Controllers
 
         }
 
+        public JsonResult GetProducto(Annies.Entities.Producto obj)
+        {
+            try
+            {
+                var bussingLogic = new Annies.BusinessLogic.VentasMayor();
+                obj.Stock_Prod = 1;
+                obj.Estado_Prod = 1;
+                var ctx = HttpContext.GetOwinContext();
+                var tipoUsuario = ctx.Authentication.User.Claims.FirstOrDefault().Value;
+
+                string draw = Request.Form.GetValues("draw")[0];
+                int inicio = Convert.ToInt32(Request.Form.GetValues("start").FirstOrDefault());
+                int fin = Convert.ToInt32(Request.Form.GetValues("length").FirstOrDefault());
+
+                obj.Auditoria = new Auditoria
+                {
+                    TipoUsuario = tipoUsuario
+                };
+                obj.Operacion = new Operacion
+                {
+                    Inicio = (inicio / fin),
+                    Fin = fin
+                };
+
+                var response = bussingLogic.GetProducto(obj);
+                var Datos = response.Data;
+                int totalRecords = Datos.Any() ? Datos.FirstOrDefault().Operacion.TotalRows : 0;
+                int recFilter = totalRecords;
+
+                var result = (new
+                {
+                    draw = Convert.ToInt32(draw),
+                    recordsTotal = totalRecords,
+                    recordsFiltered = recFilter,
+                    data = Datos
+                });
+
+                return Json(result);
+            }
+            catch (Exception ex)
+            {
+                return Json(Annies.Common.ConfigurationUtilities.ErrorCatchDataTable(ex));
+            }
+
+        }
+
         public JsonResult GetAllVentasMayor(Annies.Entities.VentasMayor obj)
         {
             try
@@ -223,6 +269,8 @@ namespace WebCalzadosAnnies.Controllers
             cell.CellStyle = styleBody;
 
         }
+
+
 
     }
 }

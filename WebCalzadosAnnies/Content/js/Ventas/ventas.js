@@ -351,11 +351,22 @@
             { data: "Stock_Prod" },
             { data: "Codigo_Al" },
             { data: "Marca_Prod" },
+            { data: "Estado_Prod" },
             { data: "Precio_Prod" },
         ];
         var columnDefs = [
             {
                 "targets": [4],
+                "className": "text-center",
+                'render': function (data, type, full, meta) {
+                    if (data == 1) {
+                        return "Activo";
+                    } else if (data == 3) return "Oferta";
+                    else return "Inactivo";
+                }
+            },  
+            {
+                "targets": [5],
                 "className": "text-right",
                 'render': function (data, type, full, meta) {
                     return '' + app.FormatNumber(data) + '';

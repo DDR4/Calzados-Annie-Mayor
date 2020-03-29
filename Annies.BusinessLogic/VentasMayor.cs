@@ -1,4 +1,5 @@
 ﻿using Annies.Common;
+using Annies.Entities;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -74,6 +75,19 @@ namespace Annies.BusinessLogic
             {
                 var result = repository.GetAllVentasMayor(obj);
                 return new Response<IEnumerable<Entities.VentasMayor>>(result);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public Response<IEnumerable<Entities.Producto>> GetProducto(Entities.Producto obj)
+        {
+            try
+            {
+                var result = repository.GetProducto(obj);
+                return new Response<IEnumerable<Entities.Producto>>(result);
             }
             catch (Exception ex)
             {

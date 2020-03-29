@@ -94,7 +94,7 @@ namespace WebCalzadosAnnies.Controllers
         {
             try
             {
-                var bussingLogic = new Annies.BusinessLogic.Producto();
+                var bussingLogic = new Annies.BusinessLogic.Ventas();
                 obj.Stock_Prod = 1;
                 obj.Estado_Prod = 1;
                 var ctx = HttpContext.GetOwinContext();
