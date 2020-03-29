@@ -96,7 +96,6 @@ namespace WebCalzadosAnnies.Controllers
             {
                 var bussingLogic = new Annies.BusinessLogic.Ventas();
                 obj.Stock_Prod = 1;
-                obj.Estado_Prod = 1;
                 var ctx = HttpContext.GetOwinContext();
                 var tipoUsuario = ctx.Authentication.User.Claims.FirstOrDefault().Value;
 
@@ -223,14 +222,14 @@ namespace WebCalzadosAnnies.Controllers
                 row = sheet.CreateRow(rownum++);
 
                 sheet.AutoSizeColumn(cellnum);
-                AddValue(row, cellnum++, item.Cod_Venta.ToString(), styleBody); sheet.AutoSizeColumn(cellnum);
-                AddValue(row, cellnum++, item.Producto.Cod_Prod.ToString(), styleBody); sheet.AutoSizeColumn(cellnum);
-                AddValue(row, cellnum++, item.Producto.Marca_Prod.ToString(), styleBody); sheet.AutoSizeColumn(cellnum);
-                AddValue(row, cellnum++, item.Cant_Venta.ToString(), styleBody); sheet.AutoSizeColumn(cellnum);
-                AddValue(row, cellnum++, item.Fecha.ToString().Substring(6,2) +"/"+ item.Fecha.ToString().Substring(4,2) + "/" + item.Fecha.ToString().Substring(0,4), styleBody); sheet.AutoSizeColumn(cellnum);
-                AddValue(row, cellnum++, item.Precio_Venta.ToString(), styleBody); sheet.AutoSizeColumn(cellnum);
-                AddValue(row, cellnum++, item.Precio_Final.ToString(), styleBody); sheet.AutoSizeColumn(cellnum);
-                AddValue(row, cellnum++, item.Talla_Venta.ToString(), styleBody); sheet.AutoSizeColumn(cellnum);
+                ExtendedMethods.AddValue(row, cellnum++, 0, item.Cod_Venta.ToString(), styleBody); sheet.AutoSizeColumn(cellnum);
+                ExtendedMethods.AddValue(row, cellnum++, 0, item.Producto.Cod_Prod.ToString(), styleBody); sheet.AutoSizeColumn(cellnum);
+                ExtendedMethods.AddValue(row, cellnum++, 0, item.Producto.Marca_Prod.ToString(), styleBody); sheet.AutoSizeColumn(cellnum);
+                ExtendedMethods.AddValue(row, cellnum++, 1, item.Cant_Venta.ToString(), styleBody); sheet.AutoSizeColumn(cellnum);
+                ExtendedMethods.AddValue(row, cellnum++, 0, item.Fecha.ToString().Substring(6,2) +"/"+ item.Fecha.ToString().Substring(4,2) + "/" + item.Fecha.ToString().Substring(0,4), styleBody); sheet.AutoSizeColumn(cellnum);
+                ExtendedMethods.AddValue(row, cellnum++, 2, item.Precio_Venta.ToString(), styleBody); sheet.AutoSizeColumn(cellnum);
+                ExtendedMethods.AddValue(row, cellnum++, 2, item.Precio_Final.ToString(), styleBody); sheet.AutoSizeColumn(cellnum);
+                ExtendedMethods.AddValue(row, cellnum++, 0, item.Talla_Venta.ToString(), styleBody); sheet.AutoSizeColumn(cellnum);
             }
 
             var nameFile = NombreExcel + DateTime.Now.ToString("dd_MM_yyyy HH:mm:ss") + ".xlsx";
@@ -240,15 +239,6 @@ namespace WebCalzadosAnnies.Controllers
             wb.Write(outStream);
             outStream.Close();
             Response.End();
-        }
-
-        public void AddValue(IRow row, int cellnum, string value, ICellStyle styleBody)
-        {
-            ICell cell;
-            cell = row.CreateCell(cellnum);
-            cell.SetCellValue(value);
-            cell.CellStyle = styleBody;
-
         }
 
         public JsonResult TallasProducto(string Cod_Prod)

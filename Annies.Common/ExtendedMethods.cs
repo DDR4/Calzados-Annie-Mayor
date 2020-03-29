@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NPOI.SS.UserModel;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -66,6 +67,29 @@ namespace Annies.Common
         public static T? ParseNullable<T>(this object obj) where T : struct
         {
             return obj == null ? null : (T?)Convert.ChangeType(obj, typeof(T));
+        }
+
+        public static void AddValue(IRow row, int cellnum, int tipodato, string value, ICellStyle styleBody)
+        {
+            ICell cell;
+            cell = row.CreateCell(cellnum);
+            int valueint = 0; double valuedouble = 0.0;
+            if (tipodato == 0)
+            {
+                cell.SetCellValue(value);
+            }
+            else if (tipodato == 1)
+            {
+                valueint = Convert.ToInt32(value);
+                cell.SetCellValue(valueint);
+            }
+            else if (tipodato == 2)
+            {
+                valuedouble = Convert.ToDouble(value);
+                cell.SetCellValue(valuedouble);
+            }
+            cell.CellStyle = styleBody;
+
         }
     }
 }

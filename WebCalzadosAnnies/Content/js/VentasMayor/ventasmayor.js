@@ -362,7 +362,7 @@
             { data: "Codigo_Al" },
             { data: "Marca_Prod" },
             { data: "Estado_Prod" },
-            { data: "Precio_Prod" },
+            { data: "Precio_Prod_Mayor" },
         ];
         var columnDefs = [
             {
@@ -434,7 +434,7 @@
             "Cod_Prod": $txtModalCodigo.val()
         }
         var method = "POST";
-        var url = "Ventas/TallasProducto";
+        var url = "VentasMayor/TallasProducto";
         var data = obj;
         var fnDoneCallback = function (data) {           
             $.each(data.Data, function (key, value) {
@@ -627,6 +627,13 @@
             columnDefs : [
 
                 {
+                    "targets": [2],
+                    "className": "text-right",
+                    'render': function (data, type, full, meta) {
+                        return '' + app.FormatNumber(data) + '';
+                    }
+                },
+                {
                     "targets": [3],
                     "visible": true,
                     "className": "text-center",
@@ -675,7 +682,7 @@
             "Cod_Prod": $txtModalCodigo.val()
         }
         var method = "POST";
-        var url = "Ventas/TallasProducto";
+        var url = "VentasMayor/TallasProducto";
         var data = obj;
         var fnDoneCallback = function (data) {
             tallas = [];
@@ -732,6 +739,13 @@
         ];
         var columnDefs = [
 
+            {
+                "targets": [3],
+                "className": "text-right",
+                'render': function (data, type, full, meta) {
+                    return '' + app.FormatNumber(data) + '';
+                }
+            },
             {
                 "targets": [4],
                 "visible": true,
@@ -891,10 +905,20 @@
             { data: "Precio_Prod_Mayor" }
         ];
 
+        var columnDefs = [
+            {
+                "targets": [4],
+                "className": "text-right",
+                'render': function (data, type, full, meta) {
+                    return '' + app.FormatNumber(data) + '';
+                }
+            }
+        ];
+
         var filtros = {
             pageLength: 10
         };
-        app.FillDataTable($tblTallasVentaMayor, data, columns, null, "#tblTallasVentaMayor", filtros, null, null, null, null, true);
+        app.FillDataTable($tblTallasVentaMayor, data, columns, columnDefs, "#tblTallasVentaMayor", filtros, null, null, null, null, true);
     }    
 
     return {

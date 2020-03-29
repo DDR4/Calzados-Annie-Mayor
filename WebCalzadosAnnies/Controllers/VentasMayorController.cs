@@ -115,7 +115,6 @@ namespace WebCalzadosAnnies.Controllers
             {
                 var bussingLogic = new Annies.BusinessLogic.VentasMayor();
                 obj.Stock_Prod = 1;
-                obj.Estado_Prod = 1;
                 var ctx = HttpContext.GetOwinContext();
                 var tipoUsuario = ctx.Authentication.User.Claims.FirstOrDefault().Value;
 
@@ -242,13 +241,13 @@ namespace WebCalzadosAnnies.Controllers
                 row = sheet.CreateRow(rownum++);
 
                 sheet.AutoSizeColumn(cellnum);
-                AddValue(row, cellnum++, item.Cod_Venta.ToString(), styleBody); sheet.AutoSizeColumn(cellnum);
-                AddValue(row, cellnum++, item.Producto.Marca_Prod.ToString(), styleBody); sheet.AutoSizeColumn(cellnum);
-                AddValue(row, cellnum++, item.Precio_Prod.ToString(), styleBody); sheet.AutoSizeColumn(cellnum);
-                AddValue(row, cellnum++, item.Precio_Venta.ToString(), styleBody); sheet.AutoSizeColumn(cellnum);
-                AddValue(row, cellnum++, item.Descuento_Venta.ToString(), styleBody); sheet.AutoSizeColumn(cellnum);
-                AddValue(row, cellnum++, item.Precio_Final.ToString(), styleBody); sheet.AutoSizeColumn(cellnum);
-                AddValue(row, cellnum++, item.Fecha.ToString().Substring(6, 2) + "/" + item.Fecha.ToString().Substring(4, 2) + "/" + item.Fecha.ToString().Substring(0, 4), styleBody); sheet.AutoSizeColumn(cellnum);
+                ExtendedMethods.AddValue(row, cellnum++, 0, item.Cod_Venta.ToString(), styleBody); sheet.AutoSizeColumn(cellnum);
+                ExtendedMethods.AddValue(row, cellnum++, 0, item.Producto.Marca_Prod.ToString(), styleBody); sheet.AutoSizeColumn(cellnum);
+                ExtendedMethods.AddValue(row, cellnum++, 2, item.Precio_Prod.ToString(), styleBody); sheet.AutoSizeColumn(cellnum);
+                ExtendedMethods.AddValue(row, cellnum++, 2, item.Precio_Venta.ToString(), styleBody); sheet.AutoSizeColumn(cellnum);
+                ExtendedMethods.AddValue(row, cellnum++, 2, item.Descuento_Venta.ToString(), styleBody); sheet.AutoSizeColumn(cellnum);
+                ExtendedMethods.AddValue(row, cellnum++, 2, item.Precio_Final.ToString(), styleBody); sheet.AutoSizeColumn(cellnum);
+                ExtendedMethods.AddValue(row, cellnum++, 0, item.Fecha.ToString().Substring(6, 2) + "/" + item.Fecha.ToString().Substring(4, 2) + "/" + item.Fecha.ToString().Substring(0, 4), styleBody); sheet.AutoSizeColumn(cellnum);
 
             }
 
@@ -261,12 +260,12 @@ namespace WebCalzadosAnnies.Controllers
             Response.End();
         }
 
-        public void AddValue(IRow row, int cellnum, string value, ICellStyle styleBody)
+        public JsonResult TallasProducto(string Cod_Prod)
         {
-            ICell cell;
-            cell = row.CreateCell(cellnum);
-            cell.SetCellValue(value);
-            cell.CellStyle = styleBody;
+            var bussingLogic = new Annies.BusinessLogic.Producto();
+            var response = bussingLogic.TallasProducto(Cod_Prod);
+            var result = new Response<IEnumerable<Annies.Entities.Tallas>>(response.Data.Where(x => x.Cantidad > 0));
+            return Json(result);
 
         }
 
