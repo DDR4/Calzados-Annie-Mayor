@@ -41,7 +41,7 @@
         };
         var DataTableLengthChange = false;
         var DataTablePageLength = 20;
-        var TablasPageLength = 50;
+        var TablasPageLength = 100;
         // Configuracion general select2
         var Select2AllowClear = true;
         var Select2Style = {
